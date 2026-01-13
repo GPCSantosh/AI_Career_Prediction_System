@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import pickle
 import os
 import pandas as pd
-from .schemas import CareerInput
+from schemas import CareerInput
 
 app = FastAPI()
 
