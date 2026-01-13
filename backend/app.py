@@ -10,6 +10,12 @@ app = FastAPI()
 def health():
     return {"status": "AI Career Prediction Backend is running"}
 
+@app.get("/")
+def root():
+    return {
+        "status": "AI Career Prediction Backend is running",
+        "docs": "/docs"
+    }
 
 # ---------------- CORS ----------------
 app.add_middleware(
@@ -62,7 +68,3 @@ def predict(data: CareerInput):
     except ValueError as e:
         return {"error": str(e)}
 
-
-@app.get("/")
-def root():
-    return {"status": "AI Career Prediction Backend is running"}
