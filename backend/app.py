@@ -6,6 +6,10 @@ import pandas as pd
 from schemas import CareerInput
 
 app = FastAPI()
+@app.get("/")
+def health():
+    return {"status": "AI Career Prediction Backend is running"}
+
 
 # ---------------- CORS ----------------
 app.add_middleware(
@@ -57,3 +61,8 @@ def predict(data: CareerInput):
 
     except ValueError as e:
         return {"error": str(e)}
+
+
+@app.get("/")
+def root():
+    return {"status": "AI Career Prediction Backend is running"}
