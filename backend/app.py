@@ -7,9 +7,7 @@ from .schemas import CareerInput
 
 app = FastAPI()
 
-# -----------------------------
-# CORS
-# -----------------------------
+# ---------------- CORS ----------------
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -18,9 +16,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# -----------------------------
-# Load paths
-# -----------------------------
+# ---------------- Paths ----------------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 model = pickle.load(open(os.path.join(BASE_DIR, "model.pkl"), "rb"))
@@ -28,11 +24,11 @@ le_exp, le_emp, le_size, le_domain, le_job = pickle.load(
     open(os.path.join(BASE_DIR, "encoders.pkl"), "rb")
 )
 
-salary_df = pd.read_csv(os.path.join(BASE_DIR, "processed_salary_data.csv"))
+salary_df = pd.read_csv(
+    os.path.join(BASE_DIR, "processed_salary_data.csv")
+)
 
-# -----------------------------
-# Safe encoder
-# -----------------------------
+# ---------------- Encoder safety ----------------
 def encode_safe(encoder, value, field):
     if value not in encoder.classes_:
         raise ValueError(
@@ -40,9 +36,7 @@ def encode_safe(encoder, value, field):
         )
     return encoder.transform([value])[0]
 
-# -----------------------------
-# Prediction API
-# -----------------------------
+# ---------------- API ----------------
 @app.post("/predict")
 def predict(data: CareerInput):
     try:
@@ -56,12 +50,9 @@ def predict(data: CareerInput):
 
         job_salary = salary_df[salary_df["job_title"] == job_encoded]["salary"]
 
-        min_salary = int(job_salary.min())
-        max_salary = int(job_salary.max())
-
         return {
             "predicted_role": job_title,
-            "salary_range_usd": f"${min_salary} - ${max_salary}"
+            "salary_range_usd": f"${int(job_salary.min())} - ${int(job_salary.max())}"
         }
 
     except ValueError as e:
