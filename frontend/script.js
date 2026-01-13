@@ -27,11 +27,11 @@ function predictCareer() {
         } else {
             document.getElementById("result").innerHTML =
                 `Predicted Role: <b>${data.predicted_role}</b><br>
-                 Expected Salary Range: <b>${data.salary_range_usd}</b>`;
+                 Salary Range: <b>${data.salary_range_usd}</b>`;
         }
     })
     .catch(() => {
         document.getElementById("result").innerText =
-            "Backend connection failed";
+            "Backend not reachable";
     });
 }
