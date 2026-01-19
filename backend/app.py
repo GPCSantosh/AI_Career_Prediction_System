@@ -33,26 +33,12 @@ def predict(data: CareerInput):
         min_salary = int(match.min())
         max_salary = int(match.max())
 
-        # readiness score based on role frequency
-        total = len(salary_data)
-        count = len(match)
-
-        readiness = int((count / total) * 100)
-
-        if readiness < 20:
-            readiness_level = "Low"
-        elif readiness < 50:
-            readiness_level = "Moderate"
-        else:
-            readiness_level = "High"
-
+        readiness = round(len(match)/len(salary_data)*100,2)
 
         return {
             "predicted_role": role,
             "salary_range_usd": f"${min_salary} - ${max_salary}",
-            "readiness_score": readiness,
-            "readiness_level": readiness_level
+            "readiness_score": f"{readiness}%"
         }
-
     except:
         return {"predicted_role":"No matching role found","salary_range_usd":"N/A","readiness_score":"0%"}

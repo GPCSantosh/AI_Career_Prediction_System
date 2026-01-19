@@ -14,10 +14,7 @@ async function predictCareer() {
 
   let result = await res.json();
 
-    document.getElementById("role").innerHTML = "Role: " + result.predicted_role;
-    document.getElementById("salary").innerHTML = "Salary: " + result.salary_range_usd;
-
-    let score = result.readiness_score || 0;
-    document.getElementById("readiness_bar").style.width = score + "%";
-    document.getElementById("readiness_text").innerHTML = score + "% (" + result.readiness_level + ")";
+  document.getElementById("role").innerHTML = "Role: " + result.predicted_role;
+  document.getElementById("salary").innerHTML = "Salary: " + result.salary_range_usd;
+  document.getElementById("readiness").innerHTML = "Readiness: " + result.readiness_score;
 }
