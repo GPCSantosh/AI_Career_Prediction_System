@@ -1,21 +1,40 @@
 async function predictCareer() {
-  let data = {
-    domain: document.getElementById("domain").value,
-    experience: document.getElementById("experience").value,
-    employment: document.getElementById("employment").value,
-    company_size: document.getElementById("company_size").value
+
+  const domain = document.getElementById("domain").value;
+  const experience = document.getElementById("experience").value;
+  const employment = document.getElementById("employment").value;
+  const company_size = document.getElementById("company_size").value;
+
+  const payload = {
+    domain: domain,
+    experience: experience,
+    employment: employment,
+    company_size: company_size
   };
 
-  let res = await fetch("https://ai-career-backend-vnmr.onrender.com/predict", {
+  try {
+    const response = await fetch("https://ai-career-backend-vnmr.onrender.com/predict", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
 
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify(data)
-  });
+    const result = await response.json();
 
-  let result = await res.json();
+    document.getElementById("role").innerHTML = "Predicted Role: " + result.predicted_role;
+    document.getElementById("salary").innerHTML = "Salary Range: " + result.salary_range_usd;
 
-  document.getElementById("role").innerHTML = "Role: " + result.predicted_role;
-  document.getElementById("salary").innerHTML = "Salary: " + result.salary_range_usd;
-  document.getElementById("readiness").innerHTML = "Readiness: " + result.readiness_score;
+    if (result.readiness_score !== undefined) {
+      document.getElementById("readiness").innerHTML = "Readiness Score: " + result.readiness_score + "%";
+    } else {
+      document.getElementById("readiness").innerHTML = "Readiness Score: N/A";
+    }
+
+  } catch (error) {
+    document.getElementById("role").innerHTML = "Backend not reachable";
+    document.getElementById("salary").innerHTML = "";
+    document.getElementById("readiness").innerHTML = "";
+  }
 }
