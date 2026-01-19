@@ -1,59 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>AI Career Prediction System</title>
-    <link rel="stylesheet" href="style.css">
+<title>AI Career Prediction</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="container">
-    <h2>AI Career Prediction System</h2>
-<label>Domain</label>
-<select id="domain">
-    <option value="">Select</option>
-    <option value="Data Science">Data Science</option>
-<option value="Cyber Security">Cyber Security</option>
-<option value="Software Development">Software Development</option>
-<option value="Software Testing">Software Testing</option>
-<option value="DevOps">DevOps</option>
-<option value="Cloud Computing">Cloud Computing</option>
+<h2>AI Career Prediction System</h2>
 
+<select id="domain">
+<option>Data Science</option>
+<option>Cyber Security</option>
+<option>Software Development</option>
+<option>Software Testing</option>
+<option>DevOps</option>
+<option>Cloud Computing</option>
 </select>
 
-    <label>Experience Level</label>
-        <select id="experience">
-            <option value="">Select</option>
-            <option value="EN">Entry (EN)</option>
-            <option value="MI">Mid (MI)</option>
-            <option value="SE">Senior (SE)</option>
-            <option value="EX">Executive (EX)</option>
-        </select>
+<select id="experience">
+<option value="EN">EN</option>
+<option value="MI">MI</option>
+<option value="SE">SE</option>
+</select>
 
+<select id="employment">
+<option>Full Time</option>
+</select>
 
-    <label>Employment Type</label>
-        <select id="employment">
-            <option value="">Select</option>
-            <option value="Full Time">Full Time</option>
-            <option value="Part Time">Part Time</option>
-            <option value="Contract">Contract</option>
-        </select>
+<select id="company_size">
+<option>Small</option>
+<option>Medium</option>
+<option>Large</option>
+</select>
 
+<button onclick="predictCareer()">Predict</button>
 
-    <label>Company Size</label>
-        <select id="company_size">
-            <option value="">Select</option>
-            <option value="Small">Small</option>
-            <option value="Medium">Medium</option>
-            <option value="Large">Large</option>
-        </select>
-
-
-    <button onclick="predictCareer()">Predict Career</button>
-
-    <div id="result"></div>
-</div>
+<p id="result"></p>
 
 <script src="script.js"></script>
+
 </body>
 </html>

@@ -26,10 +26,12 @@ model = RandomForestClassifier(n_estimators=200, random_state=42)
 model.fit(X, y)
 
 joblib.dump(model, "model.pkl")
-joblib.dump(le_domain, "domain_encoder.pkl")
-joblib.dump(le_exp, "experience_encoder.pkl")
-joblib.dump(le_emp, "employment_encoder.pkl")
-joblib.dump(le_size, "size_encoder.pkl")
-joblib.dump(le_job, "job_encoder.pkl")
+joblib.dump({
+    "domain": le_domain,
+    "experience": le_exp,
+    "employment": le_emp,
+    "company_size": le_size,
+    "job_title": le_job
+}, "encoders.pkl")
 
 print("Model trained and saved successfully.")
