@@ -1,60 +1,58 @@
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from schemas import CareerInput
+from pydantic import BaseModel
+import pickle
 import pandas as pd
-import joblib
-import os
 
 app = FastAPI()
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+model = pickle.load(open("model.pkl","rb"))
+encoders = pickle.load(open("encoders.pkl","rb"))
+salary_data = pd.read_csv("processed_salary_data.csv")
 
-base = os.path.dirname(__file__)
-
-model = joblib.load(os.path.join(base, "model.pkl"))
-encoders = joblib.load(os.path.join(base, "encoders.pkl"))
-
-salary_df = pd.read_csv(os.path.join(base, "processed_salary_data.csv"))
-
-le_domain = encoders["domain"]
-le_exp = encoders["experience"]
-le_emp = encoders["employment"]
-le_size = encoders["company_size"]
-le_job = encoders["job_title"]
-
-def encode_safe(encoder, value):
-    return encoder.transform([value])[0]
+class CareerInput(BaseModel):
+    domain: str
+    experience: str
+    employment: str
+    company_size: str
 
 @app.get("/")
-def health():
-    return {"status": "Backend running"}
+def home():
+    return {"status":"AI Career Backend running"}
 
 @app.post("/predict")
 def predict(data: CareerInput):
-
     try:
-        dom = encode_safe(le_domain, data.domain)
-        exp = encode_safe(le_exp, data.experience)
-        emp = encode_safe(le_emp, data.employment)
-        size = encode_safe(le_size, data.company_size)
+        exp = encoders["experience"].transform([data.experience])[0]
+        emp = encoders["employment"].transform([data.employment])[0]
+        size = encoders["company_size"].transform([data.company_size])[0]
 
-        avg_salary = salary_df[salary_df["domain"] == data.domain]["salary"].mean()
+        pred = model.predict([[exp,emp,size]])[0]
+        role = encoders["job_title"].inverse_transform([pred])[0]
 
-        pred = model.predict([[dom, exp, emp, size, avg_salary]])[0]
-        job_title = le_job.inverse_transform([pred])[0]
+        match = salary_data[salary_data["job_title"]==pred]["salary"]
+        min_salary = int(match.min())
+        max_salary = int(match.max())
 
-        readiness_score = round((avg_salary / 150000) * 100, 2)
+        # readiness score based on role frequency
+        total = len(salary_data)
+        count = len(match)
+
+        readiness = int((count / total) * 100)
+
+        if readiness < 20:
+            readiness_level = "Low"
+        elif readiness < 50:
+            readiness_level = "Moderate"
+        else:
+            readiness_level = "High"
+
 
         return {
-            "predicted_role": job_title,
-            "salary_range_usd": f"${int(avg_salary*0.6)} - ${int(avg_salary*1.4)}",
-            "readiness_score": readiness_score
+            "predicted_role": role,
+            "salary_range_usd": f"${min_salary} - ${max_salary}",
+            "readiness_score": readiness,
+            "readiness_level": readiness_level
         }
 
-    except Exception:
-        return {"predicted_role": "No matching role found", "salary_range_usd": "N/A", "readiness_score": 0}
+    except:
+        return {"predicted_role":"No matching role found","salary_range_usd":"N/A","readiness_score":"0%"}

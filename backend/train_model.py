@@ -1,37 +1,54 @@
 import pandas as pd
-import joblib
-from sklearn.ensemble import RandomForestClassifier
+import pickle
 from sklearn.preprocessing import LabelEncoder
+from sklearn.ensemble import RandomForestClassifier
 
 print("Training started...")
 
-df = pd.read_csv("processed_salary_data.csv")
+cyber = pd.read_csv("../data/salaries_cyber.csv")
+ds = pd.read_csv("../data/Latest_Data_Science_Salaries.csv")
 
-le_domain = LabelEncoder()
-le_exp = LabelEncoder()
-le_emp = LabelEncoder()
-le_size = LabelEncoder()
-le_job = LabelEncoder()
+ds.columns = [c.lower().replace(" ", "_") for c in ds.columns]
+cyber.columns = [c.lower().replace(" ", "_") for c in cyber.columns]
 
-df["domain"] = le_domain.fit_transform(df["domain"])
-df["experience"] = le_exp.fit_transform(df["experience"])
-df["employment"] = le_emp.fit_transform(df["employment"])
-df["company_size"] = le_size.fit_transform(df["company_size"])
-df["job_title"] = le_job.fit_transform(df["job_title"])
+cyber = cyber.rename(columns={
+    "job_title":"job_title",
+    "experience_level":"experience",
+    "employment_type":"employment",
+    "company_size":"company_size",
+    "salary_in_usd":"salary"
+})
 
-X = df[["domain", "experience", "employment", "company_size", "salary"]]
+ds = ds.rename(columns={
+    "job_title":"job_title",
+    "experience_level":"experience",
+    "employment_type":"employment",
+    "company_size":"company_size",
+    "salary_in_usd":"salary"
+})
+
+df = pd.concat([
+    cyber[["job_title","experience","employment","company_size","salary"]],
+    ds[["job_title","experience","employment","company_size","salary"]]
+])
+
+df = df.dropna()
+
+encoders = {}
+for col in ["experience","employment","company_size","job_title"]:
+    le = LabelEncoder()
+    df[col] = le.fit_transform(df[col])
+    encoders[col] = le
+
+X = df[["experience","employment","company_size"]]
 y = df["job_title"]
 
 model = RandomForestClassifier(n_estimators=200, random_state=42)
-model.fit(X, y)
+model.fit(X,y)
 
-joblib.dump(model, "model.pkl")
-joblib.dump({
-    "domain": le_domain,
-    "experience": le_exp,
-    "employment": le_emp,
-    "company_size": le_size,
-    "job_title": le_job
-}, "encoders.pkl")
+pickle.dump(model, open("model.pkl","wb"))
+pickle.dump(encoders, open("encoders.pkl","wb"))
 
-print("Model trained and saved successfully.")
+df.to_csv("processed_salary_data.csv", index=False)
+
+print("MODEL TRAINED SUCCESSFULLY")
