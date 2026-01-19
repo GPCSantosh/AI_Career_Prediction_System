@@ -1,0 +1,4 @@
+model.pkl
+encoders.pkl
+domain_encoder.pkl
+job_encoder.pkl
