@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>AI Career Prediction</title>
-<link rel="stylesheet" href="style.css">
+  <title>AI Career Prediction</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
 <h2>AI Career Prediction System</h2>
 
 <select id="domain">
@@ -18,26 +17,39 @@
 </select>
 
 <select id="experience">
-<option value="EN">EN</option>
-<option value="MI">MI</option>
-<option value="SE">SE</option>
+<option>EN</option>
+<option>MI</option>
+<option>SE</option>
 </select>
 
 <select id="employment">
-<option>Full Time</option>
+<option>FT</option>
+<option>PT</option>
+<option>CT</option>
 </select>
 
 <select id="company_size">
-<option>Small</option>
-<option>Medium</option>
-<option>Large</option>
+<option>S</option>
+<option>M</option>
+<option>L</option>
 </select>
 
 <button onclick="predictCareer()">Predict</button>
 
-<p id="result"></p>
+<div class="result-card">
+  <h3 id="role">Role: </h3>
+  <h4 id="salary">Salary: </h4>
+
+  <div class="readiness-box">
+    <span>Readiness Score:</span>
+    <div class="meter">
+      <div id="readiness_bar"></div>
+    </div>
+    <span id="readiness_text"></span>
+  </div>
+</div>
+
 
 <script src="script.js"></script>
-
 </body>
 </html>
