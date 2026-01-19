@@ -10,6 +10,10 @@ function predictCareer() {
         return;
     }
 
+document.getElementById("result").innerText =
+    "Waking up backend… please wait 30 seconds if inactive.";
+
+
     fetch("https://ai-career-backend-366f.onrender.com/predict", {
 
         method: "POST",
@@ -23,14 +27,15 @@ function predictCareer() {
     })
     .then(res => res.json())
     .then(data => {
-        if (data.error) {
-            document.getElementById("result").innerText = data.error;
-        } else {
-            document.getElementById("result").innerHTML =
-                `Predicted Role: <b>${data.predicted_role}</b><br>
-                 Salary Range: <b>${data.salary_range_usd}</b>`;
-        }
-    })
+    if (data.error) {
+        document.getElementById("result").innerText = data.error;
+    } else {
+        document.getElementById("result").innerHTML =
+            `Predicted Role: <b>${data.predicted_role}</b><br>
+             Salary Range: <b>${data.salary_range_usd}</b>`;
+    }
+})
+
     .catch(() => {
         document.getElementById("result").innerText =
             "Backend not reachable";
