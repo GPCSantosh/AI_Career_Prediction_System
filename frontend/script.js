@@ -16,6 +16,7 @@ document.getElementById("result").innerText =
 
     fetch("https://ai-career-backend-366f.onrender.com/predict", {
 
+
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
