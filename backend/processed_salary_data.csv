@@ -1,26 +1,24 @@
 domain,experience,employment,company_size,job_title,salary
+Data Science,EN,Full Time,Small,Data Analyst,70000
+Data Science,MI,Full Time,Medium,Data Scientist,95000
+Data Science,SE,Full Time,Large,Data Engineer,120000
 
-Data Science,EN,FT,S,Data Analyst,70000
-Data Science,MI,FT,M,Data Scientist,95000
-Data Science,SE,FT,L,Data Engineer,120000
-Data Science,SE,PT,M,Data Consultant,80000L
-Cyber Security,EN,FT,S,Security Engineer,75000
-Cyber Security,MI,FT,M,Ethical Hacker,90000
-Cyber Security,SE,FT,L,Cyber Security Analyst,110000
-Cyber Security,SE,CT,M,Penetration Tester,95000L
-Software Development,EN,FT,S,Frontend Developer,70000
-Software Development,MI,FT,M,Backend Developer,85000
-Software Development,SE,FT,L,Software Engineer,100000
-Software Development,SE,PT,M,FStack Developer,90000L
-Software Testing,EN,FT,S,Automation Tester,65000
-Software Testing,MI,FT,M,Software Tester,60000
-Software Testing,SE,FT,L,QA Engineer,70000
-Software Testing,SE,CT,M,Test Engineer,65000L
-DevOps,EN,FT,S,Build Engineer,80000
-DevOps,MI,FT,M,System Administrator,90000
-DevOps,SE,FT,L,DevOps Engineer,115000
-DevOps,SE,CT,M,Release Engineer,105000L
-Cloud Computing,EN,FT,S,Azure Engineer,95000
-Cloud Computing,MI,FT,M,AWS Engineer,110000
-Cloud Computing,SE,FT,L,Cloud Engineer,130000
-Cloud Computing,SE,PT,M,Cloud Architect,125000L
+Cyber Security,EN,Full Time,Small,Security Engineer,75000
+Cyber Security,MI,Full Time,Medium,Ethical Hacker,90000
+Cyber Security,SE,Full Time,Large,Cyber Security Analyst,110000
+
+Software Development,EN,Full Time,Small,Frontend Developer,70000
+Software Development,MI,Full Time,Medium,Backend Developer,85000
+Software Development,SE,Full Time,Large,Software Engineer,100000
+
+Software Testing,EN,Full Time,Small,Automation Tester,65000
+Software Testing,MI,Full Time,Medium,Software Tester,60000
+Software Testing,SE,Full Time,Large,QA Engineer,70000
+
+DevOps,EN,Full Time,Small,Build Engineer,80000
+DevOps,MI,Full Time,Medium,System Administrator,90000
+DevOps,SE,Full Time,Large,DevOps Engineer,115000
+
+Cloud Computing,EN,Full Time,Small,Azure Engineer,95000
+Cloud Computing,MI,Full Time,Medium,AWS Engineer,110000
+Cloud Computing,SE,Full Time,Large,Cloud Engineer,130000

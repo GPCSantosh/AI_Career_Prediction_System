@@ -1,14 +1,14 @@
-from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from schemas import CareerInput
 import pandas as pd
 import os
 
 app = FastAPI()
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -19,7 +19,7 @@ salary_df = pd.read_csv(csv_path)
 
 @app.get("/")
 def health():
-    return {"status": "AI Career Backend Running"}
+    return {"status": "Backend running successfully"}
 
 @app.post("/predict")
 def predict(data: CareerInput):
@@ -38,7 +38,6 @@ def predict(data: CareerInput):
         }
 
     role = matches.iloc[0]["job_title"]
-
     min_salary = int(matches["salary"].min())
     max_salary = int(matches["salary"].max())
 
