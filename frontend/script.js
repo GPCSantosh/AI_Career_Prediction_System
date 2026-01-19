@@ -6,7 +6,8 @@ async function predictCareer() {
     company_size: document.getElementById("company_size").value
   };
 
-  let res = await fetch("https://ai-career-backend-366f.onrender.com/predict", {
+  let res = await fetch("https://ai-career-backend-vnmr.onrender.com/predict", {
+
     method:"POST",
     headers:{"Content-Type":"application/json"},
     body:JSON.stringify(data)
