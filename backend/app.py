@@ -1,9 +1,17 @@
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 from schemas import CareerInput
 import pandas as pd
 import os
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 csv_path = os.path.join(os.path.dirname(__file__), "processed_salary_data.csv")
 
