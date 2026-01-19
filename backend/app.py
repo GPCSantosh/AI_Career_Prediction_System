@@ -48,7 +48,13 @@ def predict(data: CareerInput):
         emp = encode_safe(le_emp, data.employment, "employment")
         size = encode_safe(le_size, data.company_size, "company_size")
 
-        avg_salary = salary_df[salary_df["domain"] == data.domain]["salary"].mean()
+        avg_salary = salary_df[salary_df["domain"].str.lower() == data.domain.lower()]["salary"].mean()
+
+        if pd.isna(avg_salary):
+            return {
+                "predicted_role": "Domain not trained yet",
+                "salary_range_usd": "N/A"
+            }
 
         job_encoded = model.predict([[dom, exp, emp, size, avg_salary]])[0]
         job_title = le_job.inverse_transform([job_encoded])[0]
