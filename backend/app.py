@@ -2,19 +2,37 @@ import joblib
 import pandas as pd
 from fastapi import FastAPI
 from schemas import CareerInput
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.preprocessing import LabelEncoder
 
 app = FastAPI()
 
-model = joblib.load("model.pkl")
-
-le_domain = joblib.load("domain_encoder.pkl")
-le_exp = joblib.load("experience_encoder.pkl")
-le_emp = joblib.load("employment_encoder.pkl")
-le_size = joblib.load("size_encoder.pkl")
-le_job = joblib.load("job_encoder.pkl")
-
-
+# Load dataset
 salary_df = pd.read_csv("processed_salary_data.csv")
+
+# Train encoders
+le_domain = LabelEncoder().fit(salary_df["domain"])
+le_exp = LabelEncoder().fit(salary_df["experience"])
+le_emp = LabelEncoder().fit(salary_df["employment"])
+le_size = LabelEncoder().fit(salary_df["company_size"])
+le_job = LabelEncoder().fit(salary_df["job_title"])
+
+# Encode dataset
+salary_df["domain"] = le_domain.transform(salary_df["domain"])
+salary_df["experience"] = le_exp.transform(salary_df["experience"])
+salary_df["employment"] = le_emp.transform(salary_df["employment"])
+salary_df["company_size"] = le_size.transform(salary_df["company_size"])
+salary_df["job_title"] = le_job.transform(salary_df["job_title"])
+
+# Train model
+X = salary_df[["domain", "experience", "employment", "company_size", "salary"]]
+y = salary_df["job_title"]
+
+model = RandomForestClassifier(n_estimators=200, random_state=42)
+model.fit(X, y)
+
+print("Model trained on startup successfully.")
+
 
 def encode_safe(encoder, value, field):
     if value not in encoder.classes_:
