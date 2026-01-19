@@ -1,31 +1,3 @@
-body {
-  font-family: Arial;
-  padding: 40px;
-}
-
-.result-card {
-  margin-top: 20px;
-  padding: 15px;
-  width: 320px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  background: #f9f9f9;
-}
-
-.readiness-box {
-  margin-top: 10px;
-}
-
-.meter {
-  width: 100%;
-  height: 10px;
-  background: #eee;
-  border-radius: 4px;
-}
-
-#readiness_bar {
-  height: 10px;
-  width: 0%;
-  background: #007bff;
-  border-radius: 4px;
-}
+body { font-family: Arial; padding:40px; }
+select, button { display:block; width:300px; margin:10px 0; padding:8px; }
+button { background:#007bff; color:white; border:none; }
