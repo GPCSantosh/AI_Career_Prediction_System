@@ -1,8 +1,24 @@
 domain,experience,employment,company_size,job_title,salary
 DataScience,SE,FT,M,Data Engineer,120000
 DataScience,MI,FT,M,Data Scientist,95000
+DataScience,EN,FT,S,Data Analyst,70000
+
 Cyber,SE,FT,M,Cyber Security Analyst,110000
+Cyber,MI,FT,M,Ethical Hacker,90000
+Cyber,EN,FT,S,Security Engineer,75000
+
 SoftwareDev,SE,FT,M,Software Engineer,100000
-Testing,MI,FT,M,QA Engineer,70000
+SoftwareDev,MI,FT,M,Backend Developer,85000
+SoftwareDev,EN,FT,S,Frontend Developer,70000
+
+Testing,SE,FT,M,QA Engineer,70000
+Testing,MI,FT,M,Software Tester,60000
+Testing,EN,FT,S,Automation Tester,65000
+
 DevOps,SE,FT,M,DevOps Engineer,115000
+DevOps,MI,FT,M,System Administrator,90000
+DevOps,EN,FT,S,Build Engineer,80000
+
 Cloud,SE,FT,M,Cloud Engineer,130000
+Cloud,MI,FT,M,AWS Engineer,110000
+Cloud,EN,FT,S,Azure Engineer,95000
