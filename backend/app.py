@@ -1,71 +1,42 @@
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-import pickle
-import os
+import joblib
 import pandas as pd
+from fastapi import FastAPI
 from schemas import CareerInput
 
 app = FastAPI()
-@app.get("/")
-def health():
-    return {"status": "AI Career Prediction Backend is running"}
 
-@app.get("/")
-def root():
-    return {
-        "status": "AI Career Prediction Backend is running",
-        "docs": "/docs"
-    }
-
-# ---------------- CORS ----------------
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-# ---------------- Paths ----------------
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
-model = pickle.load(open(os.path.join(BASE_DIR, "model.pkl"), "rb"))
-le_exp, le_emp, le_size, le_domain, le_job = pickle.load(
-    open(os.path.join(BASE_DIR, "encoders.pkl"), "rb")
-)
-
-salary_df = pd.read_csv(
-    os.path.join(BASE_DIR, "processed_salary_data.csv")
-)
-
-# ---------------- Encoder safety ----------------
 model = joblib.load("model.pkl")
-domain_encoder = joblib.load("domain_encoder.pkl")
-job_encoder = joblib.load("job_encoder.pkl")
+le_domain = joblib.load("domain_encoder.pkl")
+le_exp = joblib.load("experience_encoder.pkl")
+le_emp = joblib.load("employment_encoder.pkl")
+le_size = joblib.load("size_encoder.pkl")
+le_job = joblib.load("job_encoder.pkl")
 
+salary_df = pd.read_csv("processed_salary_data.csv")
 
-# ---------------- API ----------------
+def encode_safe(encoder, value, field):
+    if value not in encoder.classes_:
+        raise ValueError(f"Invalid {field}. Allowed values: {list(encoder.classes_)}")
+    return encoder.transform([value])[0]
+
 @app.post("/predict")
 def predict(data: CareerInput):
 
-    if data.domain not in domain_encoder.classes_:
+    try:
+        dom = encode_safe(le_domain, data.domain, "domain")
+        exp = encode_safe(le_exp, data.experience, "experience")
+        emp = encode_safe(le_emp, data.employment, "employment")
+        size = encode_safe(le_size, data.company_size, "company_size")
+
+        avg_salary = salary_df[salary_df["domain"] == data.domain]["salary"].mean()
+
+        job_encoded = model.predict([[dom, exp, emp, size, avg_salary]])[0]
+        job_title = le_job.inverse_transform([job_encoded])[0]
+
         return {
-            "predicted_role": "Domain not trained yet",
-            "salary_range_usd": "N/A"
+            "predicted_role": job_title,
+            "salary_range_usd": f"${int(avg_salary*0.6)} - ${int(avg_salary*1.4)}"
         }
 
-    domain_code = domain_encoder.transform([data.domain])[0]
-
-    avg_salary = salary_df[salary_df["domain"] == data.domain]["salary"].mean()
-
-    job_code = model.predict([[domain_code, avg_salary]])[0]
-
-    job_title = job_encoder.inverse_transform([job_code])[0]
-
-    min_salary = int(avg_salary * 0.6)
-    max_salary = int(avg_salary * 1.4)
-
-    return {
-        "predicted_role": job_title,
-        "salary_range_usd": f"${min_salary} - ${max_salary}"
-    }
+    except ValueError as e:
+        return {"error": str(e)}
