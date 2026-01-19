@@ -53,7 +53,15 @@ def predict(data: CareerInput):
         exp = encode_safe(le_exp, data.experience, "experience")
         emp = encode_safe(le_emp, data.employment, "employment")
         size = encode_safe(le_size, data.company_size, "company_size")
-        dom = encode_safe(le_domain, data.domain, "domain")
+
+        # Handle unknown domains safely
+        if data.domain not in le_domain.classes_:
+            return {
+                "predicted_role": "Domain not trained yet",
+                "salary_range_usd": "N/A"
+            }
+
+        dom = le_domain.transform([data.domain])[0]
 
         job_encoded = model.predict([[exp, emp, size, dom]])[0]
         job_title = le_job.inverse_transform([job_encoded])[0]
@@ -67,4 +75,3 @@ def predict(data: CareerInput):
 
     except ValueError as e:
         return {"error": str(e)}
-
