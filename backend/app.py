@@ -1,10 +1,13 @@
 from fastapi import FastAPI
 from schemas import CareerInput
 import pandas as pd
+import os
 
 app = FastAPI()
 
-salary_df = pd.read_csv("processed_salary_data.csv")
+csv_path = os.path.join(os.path.dirname(__file__), "processed_salary_data.csv")
+
+salary_df = pd.read_csv(csv_path)
 
 @app.get("/")
 def health():
