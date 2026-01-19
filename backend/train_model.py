@@ -22,7 +22,7 @@ df["job_title"] = le_job.fit_transform(df["job_title"])
 X = df[["domain", "experience", "employment", "company_size", "salary"]]
 y = df["job_title"]
 
-model = RandomForestClassifier(n_estimators=100, random_state=42)
+model = RandomForestClassifier(n_estimators=200, random_state=42)
 model.fit(X, y)
 
 joblib.dump(model, "model.pkl")
