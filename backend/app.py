@@ -3,7 +3,15 @@ from pydantic import BaseModel
 import pickle
 import pandas as pd
 
+from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 model = pickle.load(open("model.pkl","rb"))
 encoders = pickle.load(open("encoders.pkl","rb"))
