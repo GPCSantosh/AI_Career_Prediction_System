@@ -39,39 +39,33 @@ salary_df = pd.read_csv(
 )
 
 # ---------------- Encoder safety ----------------
-def encode_safe(encoder, value, field):
-    if value not in encoder.classes_:
-        raise ValueError(
-            f"Invalid {field}. Allowed values: {list(encoder.classes_)}"
-        )
-    return encoder.transform([value])[0]
+model = joblib.load("model.pkl")
+domain_encoder = joblib.load("domain_encoder.pkl")
+job_encoder = joblib.load("job_encoder.pkl")
+
 
 # ---------------- API ----------------
 @app.post("/predict")
 def predict(data: CareerInput):
-    try:
-        exp = encode_safe(le_exp, data.experience, "experience")
-        emp = encode_safe(le_emp, data.employment, "employment")
-        size = encode_safe(le_size, data.company_size, "company_size")
 
-        # Handle unknown domains safely
-        if data.domain not in le_domain.classes_:
-            return {
-                "predicted_role": "Domain not trained yet",
-                "salary_range_usd": "N/A"
-            }
-
-        dom = le_domain.transform([data.domain])[0]
-
-        job_encoded = model.predict([[exp, emp, size, dom]])[0]
-        job_title = le_job.inverse_transform([job_encoded])[0]
-
-        job_salary = salary_df[salary_df["job_title"] == job_encoded]["salary"]
-
+    if data.domain not in domain_encoder.classes_:
         return {
-            "predicted_role": job_title,
-            "salary_range_usd": f"${int(job_salary.min())} - ${int(job_salary.max())}"
+            "predicted_role": "Domain not trained yet",
+            "salary_range_usd": "N/A"
         }
 
-    except ValueError as e:
-        return {"error": str(e)}
+    domain_code = domain_encoder.transform([data.domain])[0]
+
+    avg_salary = salary_df[salary_df["domain"] == data.domain]["salary"].mean()
+
+    job_code = model.predict([[domain_code, avg_salary]])[0]
+
+    job_title = job_encoder.inverse_transform([job_code])[0]
+
+    min_salary = int(avg_salary * 0.6)
+    max_salary = int(avg_salary * 1.4)
+
+    return {
+        "predicted_role": job_title,
+        "salary_range_usd": f"${min_salary} - ${max_salary}"
+    }
