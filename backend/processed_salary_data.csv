@@ -1,7 +1,24 @@
 domain,experience,employment,company_size,job_title,salary
+Data Science,EN,Full Time,Small,Data Analyst,70000
+Data Science,MI,Full Time,Medium,Data Scientist,95000
 Data Science,SE,Full Time,Medium,Data Engineer,120000
+
+Cyber Security,EN,Full Time,Small,Security Engineer,75000
+Cyber Security,MI,Full Time,Medium,Ethical Hacker,90000
 Cyber Security,SE,Full Time,Medium,Cyber Security Analyst,110000
+
+Software Development,EN,Full Time,Small,Frontend Developer,70000
+Software Development,MI,Full Time,Medium,Backend Developer,85000
 Software Development,SE,Full Time,Medium,Software Engineer,100000
+
+Software Testing,EN,Full Time,Small,Automation Tester,65000
+Software Testing,MI,Full Time,Medium,Software Tester,60000
 Software Testing,SE,Full Time,Medium,QA Engineer,70000
+
+DevOps,EN,Full Time,Small,Build Engineer,80000
+DevOps,MI,Full Time,Medium,System Administrator,90000
 DevOps,SE,Full Time,Medium,DevOps Engineer,115000
+
+Cloud Computing,EN,Full Time,Small,Azure Engineer,95000
+Cloud Computing,MI,Full Time,Medium,AWS Engineer,110000
 Cloud Computing,SE,Full Time,Medium,Cloud Engineer,130000
