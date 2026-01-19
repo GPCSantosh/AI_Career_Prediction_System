@@ -6,11 +6,13 @@ from schemas import CareerInput
 app = FastAPI()
 
 model = joblib.load("model.pkl")
+
 le_domain = joblib.load("domain_encoder.pkl")
 le_exp = joblib.load("experience_encoder.pkl")
 le_emp = joblib.load("employment_encoder.pkl")
 le_size = joblib.load("size_encoder.pkl")
 le_job = joblib.load("job_encoder.pkl")
+
 
 salary_df = pd.read_csv("processed_salary_data.csv")
 
